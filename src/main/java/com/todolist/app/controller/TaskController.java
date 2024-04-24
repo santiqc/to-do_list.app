@@ -27,14 +27,14 @@ public class TaskController {
     @Autowired
     private ITaskService taskService;
 
-    @Operation(summary = "Guardar tarea")
+    @Operation(summary = "Guardar tarea", description = "Crea una nueva tarea en la lista de tareas.")
     @PostMapping("/tasks")
     @ApiResponse(responseCode = "201", description = "Tarea guardada correctamente")
     public ResponseEntity<ResponseDTO> saveTask(@RequestBody Task task) throws TaskException {
         return new ResponseEntity<>(taskService.saveTask(task), HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Obtener lista de tareas paginada")
+    @Operation(summary = "Obtener lista de tareas paginada", description = "Obtiene una lista paginada de todas las tareas. Por defecto es page = 1 y size 10")
     @GetMapping("/tasks")
     @ApiResponse(responseCode = "200", description = "Lista de tareas paginada", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Page.class)))
     public Page<Task> getTasks(
