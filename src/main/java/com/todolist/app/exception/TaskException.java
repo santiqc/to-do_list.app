@@ -1,6 +1,9 @@
 package com.todolist.app.exception;
 
 
+import lombok.Getter;
+
+@Getter
 public class TaskException extends RuntimeException {
 
     private final String mensaje;
@@ -10,6 +13,13 @@ public class TaskException extends RuntimeException {
         this.mensaje = message;
     }
 
+    public TaskException(Exception e) {
+        super(e.getMessage(), e);
+
+        this.mensaje = e.getMessage();
+
+    }
+
     @Override
     public String toString() {
         return "TodoListExc{" +
@@ -17,7 +27,4 @@ public class TaskException extends RuntimeException {
                 '}';
     }
 
-    public String getMensaje() {
-        return mensaje;
-    }
 }

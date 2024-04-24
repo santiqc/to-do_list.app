@@ -51,7 +51,8 @@ public class TaskService implements ITaskService {
             return responseDTO;
         } catch (Exception e) {
             LOGGER.error("Error al actualizar la tarea: {}", e.getMessage());
-            throw new TaskException(e.getMessage());
+            TaskException he = new TaskException(Mensaje.ERROR_UPDATE);
+            throw new TaskException(he);
         }
     }
 
@@ -66,7 +67,8 @@ public class TaskService implements ITaskService {
             return responseDTO;
         } catch (Exception e) {
             LOGGER.error("Error al guardar la tarea: {}", e.getMessage());
-            throw new TaskException(e.getMessage());
+            TaskException he = new TaskException(Mensaje.ERROR_SAVE);
+            throw new TaskException(he);
         }
     }
 
@@ -76,7 +78,8 @@ public class TaskService implements ITaskService {
             return taskRepository.findAll(pageable);
         } catch (Exception e) {
             LOGGER.error("Error al obtener lista paginada de tarea: {}", e.getMessage());
-            throw new TaskException(e.getMessage());
+            TaskException he = new TaskException(Mensaje.ERROR_GET_LIST_TASK);
+            throw new TaskException(he);
         }
     }
 
@@ -87,7 +90,8 @@ public class TaskService implements ITaskService {
             return taskRepository.findById(idTask).orElse(null);
         } catch (Exception e) {
             LOGGER.error("Error al obtener tarea: {}", e.getMessage());
-            throw new TaskException(e.getMessage());
+            TaskException he = new TaskException(Mensaje.ERROR_GET_TASK);
+            throw new TaskException(he);
         }
     }
 
@@ -104,7 +108,8 @@ public class TaskService implements ITaskService {
             return responseDTO;
         } catch (Exception e) {
             LOGGER.error("Error al eliminar la tarea: {}", e.getMessage());
-            throw new TaskException(e.getMessage());
+            TaskException he = new TaskException(Mensaje.ERROR_ELIMINAR_TASK);
+            throw new TaskException(he);
         }
     }
 
