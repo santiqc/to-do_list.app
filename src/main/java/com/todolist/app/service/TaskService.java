@@ -7,6 +7,8 @@ import com.todolist.app.entity.Task;
 import com.todolist.app.exception.TaskException;
 import com.todolist.app.repository.TaskRepository;
 import com.todolist.app.utils.Mensaje;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,22 +16,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 
-import java.util.List;
-
 @Service
 public class TaskService implements ITaskService {
+
+    private final Logger LOGGER = LoggerFactory.getLogger(TaskService.class);
 
     @Autowired
     private TaskRepository taskRepository;
 
     @Override
     public ResponseDTO updateTask(Integer id, RequestTaskDTO task) throws TaskException {
+        LOGGER.info("El id de la tarea para actualizar es : {}", id);
         try {
             if (id == null) {
                 throw new TaskException(Mensaje.IDENTIFICADOR_NULL);
             }
 
             Task taskFound = getTaskById(id);
+            LOGGER.info("Tarea encontrada para actualizar : {}", taskFound);
             if (taskFound == null) {
                 throw new TaskException(Mensaje.TASK_NO_ENCONTRADA_ACTUALIZARLA);
             }
@@ -46,12 +50,14 @@ public class TaskService implements ITaskService {
 
             return responseDTO;
         } catch (Exception e) {
+            LOGGER.error("Error al actualizar la tarea: {}", e.getMessage());
             throw new TaskException(e.getMessage());
         }
     }
 
     @Override
     public ResponseDTO saveTask(Task task) throws TaskException {
+        LOGGER.info("Tarea para guardar : {}", task);
         try {
             ResponseDTO responseDTO = new ResponseDTO();
             taskRepository.save(task);
@@ -59,6 +65,7 @@ public class TaskService implements ITaskService {
             responseDTO.setMensaje(Mensaje.TASK_GUARDADA);
             return responseDTO;
         } catch (Exception e) {
+            LOGGER.error("Error al guardar la tarea: {}", e.getMessage());
             throw new TaskException(e.getMessage());
         }
     }
@@ -68,21 +75,25 @@ public class TaskService implements ITaskService {
         try {
             return taskRepository.findAll(pageable);
         } catch (Exception e) {
+            LOGGER.error("Error al obtener lista paginada de tarea: {}", e.getMessage());
             throw new TaskException(e.getMessage());
         }
     }
 
     @Override
     public Task getTaskById(Integer idTask) throws TaskException {
+        LOGGER.info("El id de la tarea para obtener : {}", idTask);
         try {
             return taskRepository.findById(idTask).orElse(null);
         } catch (Exception e) {
+            LOGGER.error("Error al obtener tarea: {}", e.getMessage());
             throw new TaskException(e.getMessage());
         }
     }
 
     @Override
     public ResponseDTO deleteTask(Integer idTask) throws TaskException {
+        LOGGER.info("El id de la tarea para eliminar : {}", idTask);
         try {
             Task taskFound = getTaskById(idTask);
             if (taskFound == null) throw new TaskException(Mensaje.TASK_NO_ENCONTRADA);
@@ -92,6 +103,7 @@ public class TaskService implements ITaskService {
             responseDTO.setCodigoRespuesta(HttpStatus.OK.value());
             return responseDTO;
         } catch (Exception e) {
+            LOGGER.error("Error al eliminar la tarea: {}", e.getMessage());
             throw new TaskException(e.getMessage());
         }
     }
